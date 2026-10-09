@@ -89,7 +89,7 @@ function mapView(){const list=S.skills.filter(s=>s.status!=='letgo'),pit=list.fi
   return `<section class="band" style="--c:${SCOL[i][0]};--b:${SCOL[i][1]};width:${BW[i]}%"><div class="bh"><span class="num">${i+1}</span>${st[0]} ${st[2]}</div><small>“${st[1]}”</small>
   ${here.length?`<div class="mts">${here.map(s=>`<button class="mt" aria-label="${esc(s.name)}, step ${i+1}" onclick="openS('${s.id}')"><span class="tok" style="background:${colOf(s)}">${s.emoji}</span><span>${esc(s.name)}</span></button>`).join('')}</div>`:'<div class="empty">Nothing here yet</div>'}</section>`}).join('');
  return hero('var(--teal)','#fff','<span></span><span></span>',`<h1>My big map</h1><p style="margin:6px 0 0;font-size:1.1rem">See where everything is at a glance.</p>`)
- +`<div class="pad"><div class="center" style="font-size:3rem">🚩</div>${bands}<div class="card" style="margin-top:20px">${msg}</div></div>${tabs('map')}`}
+ +`<div class="pad"><div class="center" style="font-size:3rem">🚩</div>${bands}<div class="card" style="margin-top:20px">${msg}</div></div>`}
 
 /* pocket cards */
 function cardFor(i){const c=CARDS.filter(x=>x.at.includes(i)),u=c.filter(x=>!S.cards[x.id]);return u.length?pick(u):(i===2||i===3)?pick(c):null}
@@ -224,8 +224,9 @@ function obNext(){if(OB===0&&!D.name.trim()){note('Tell me your name first 😊'
 function setAge(a){S.me.age=a;save();sh=null;render(true)}
 
 /* tabs: Home, Map, Start, Me */
+function activeTabFor(screen){if(screen==='map')return 'map';if(screen==='pick')return 'pick';if(screen==='me'||screen==='cards'||screen==='set')return 'me';return 'home'}
 function tabs(a){const t=[['home','Home','home'],['map','Map','map'],['pick','Start','plus'],['me','Me','smile']];
- return `<nav class="tabs" aria-label="Main">${t.map(([k,l,i])=>`<button class="tab ${a===k?'on':''} ${k==='pick'?'plus':''}" aria-label="${l}" ${a===k?'aria-current="page"':''} onclick="go('${k}')">${ic(i)}<span>${l}</span></button>`).join('')}</nav>`}
+ return `<nav class="tabs" aria-label="Main navigation">${t.map(([k,l,i])=>`<button type="button" class="tab ${a===k?'on':''} ${k==='pick'?'plus':''}" aria-label="${l}" ${a===k?'aria-current="page"':''} onclick="go('${k}')">${ic(i)}<span>${l}</span></button>`).join('')}</nav>`}
 function go(k){if(k==='pick'){startNew();return}v=k;sh=null;render()}
 
 /* home: one main thing, then the rest */
@@ -240,7 +241,7 @@ function home(){const m=S.me,last=S.skills.find(s=>s.status==='active')||S.skill
  :`<button class="bt span2 keep" style="--t:var(--mari)" onclick="startNew()"><span class="tok lg">＋</span><span class="kt"><b>Take your first step</b><span>Pick something you want to try</span></span>${ic('chev',28)}</button>`}</div>
  ${S.skills.length>1?`<h2 class="sec">My journeys</h2><div class="jgrid">${S.skills.map(jt).join('')}<button class="jt add" onclick="startNew()"><span style="font-size:2rem">＋</span>New journey</button></div>`:''}
  ${sg?`<div class="bento" style="margin-top:16px"><button class="bt span2 keep" style="--t:#FFD0E4" onclick="tryNew(${sg[0]},${sg[1]})"><span class="tok lg">${CATS[sg[0]].sk[sg[1]].e}</span><span class="kt"><small>Try something new</small><b>${esc(CATS[sg[0]].sk[sg[1]].n)}</b><span>${esc(CATS[sg[0]].n)}</span></span>${ic('chev',28)}</button></div>`:''}
- <p class="note">Your journeys are saved on this device only.</p></div>${tabs('home')}`}
+ <p class="note">Your journeys are saved on this device only.</p></div>`}
 
 /* me: stats, pocket cards, grown-ups */
 function meView(){const m=S.me,n=Object.keys(S.cards).length,T=S.skills.reduce((a,s)=>[a[0]+counts(s)[0],a[1]+counts(s)[1]],[0,0]);
@@ -248,7 +249,7 @@ function meView(){const m=S.me,n=Object.keys(S.cards).length,T=S.skills.reduce((
  +`<div class="pad"><div class="bento"><div class="bt" style="--t:#FFE0A8"><div class="big">${T[0]}</div><p>tough moments survived 💪</p></div><div class="bt" style="--t:#BFEFDC"><div class="big">${T[1]}</div><p>wins collected ⭐</p></div></div>
  <div class="aff">You can do hard things<br>You can learn new things<br>You can make mistakes<br>You can try again<br>You are doing great, ${esc(m.name)}! ♥</div>
  <h2 class="sec">My pocket cards</h2><p class="sub">${n} of ${CARDS.length} collected. New ones show up when you need them.</p>
- <div class="cgrid">${CARDS.map(c=>S.cards[c.id]?`<button class="pc sm" style="--c:${c.c}" onclick="sh={k:'card',id:'${c.id}'};render(true)"><b>${c.h}</b></button>`:`<div class="pc sm lock"><span>?</span><small>${c.at.length?`Found at “${STEPS[c.at[0]][0]}”`:'Found when you add a win'}</small></div>`).join('')}</div></div>${tabs('me')}`}
+ <div class="cgrid">${CARDS.map(c=>S.cards[c.id]?`<button class="pc sm" style="--c:${c.c}" onclick="sh={k:'card',id:'${c.id}'};render(true)"><b>${c.h}</b></button>`:`<div class="pc sm lock"><span>?</span><small>${c.at.length?`Found at “${STEPS[c.at[0]][0]}”`:'Found when you add a win'}</small></div>`).join('')}</div></div>`}
 
 /* picking: every skill explains itself first */
 function makeSel(ci,si,type){const c=CATS[ci],k=c.sk[si];return {n:type||k.n,sub:type?k.n:'',e:k.e,c:c.c,tip:k.tip,aha:k.aha,cat:c.id,scene:sceneFor(c.id,k.n),skill:k.n,id:c.id+si+(type||''),what:k.what,look:k.look,gu:k.gu,min:k.min,kind:type?(KDM[type]||(S.kx&&S.kx[type])||''):''}}
@@ -463,6 +464,8 @@ function skill(s){const sc=SC[s.scene]||SC.meadow,act=s.status==='active',wins=s
 function render(keep){const a=document.getElementById('app');
  if(v==='home'&&S.me&&!S.me.age&&!sh&&!render.ag){render.ag=1;sh={k:'age'}}
  a.innerHTML=v==='onb'?onb():v==='pick'?pickView():v==='set'?settings():v==='map'?mapView():(v==='me'||v==='cards')?meView():v==='skill'&&get(sel)?skill(get(sel)):home();
+ // Keep primary navigation persistent across all app screens; onboarding stays focused.
+ if(v!=='onb' && S.me) a.insertAdjacentHTML('beforeend',tabs(activeTabFor(v)));
  let w=document.getElementById('shw');if(!w){w=document.createElement('div');w.id='shw';document.body.appendChild(w)}
  w.innerHTML=sheet();hop=null;
  if(sh&&sh!==render.l){const e=w.querySelector('.sheet');if(e)e.focus();if(sh.k==='breathe')startBreath()}render.l=sh;

@@ -258,3 +258,15 @@ button:focus-visible,[tabindex]:focus-visible,summary:focus-visible { outline: 3
   :root { --mute: #484B53; --line: #777A82; }
   .card,.speech,.jt,.pt,.tc,.in { border: 2px solid var(--line); }
 }
+
+/* Persistent primary navigation: shared across every post-onboarding screen. */
+.wrap { padding-bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+.tabs { bottom: calc(10px + env(safe-area-inset-bottom, 0px)); z-index: 50; }
+/* Journey actions and picker confirmation live above the navigation, never on top of it. */
+.dock { bottom: calc(94px + env(safe-area-inset-bottom, 0px)); z-index: 45; }
+#installHint { bottom: calc(100px + env(safe-area-inset-bottom, 0px)) !important; z-index: 55; }
+#tst { bottom: calc(100px + env(safe-area-inset-bottom, 0px)); z-index: 100; }
+@media (min-width: 700px) {
+  .wrap { padding-bottom: calc(190px + env(safe-area-inset-bottom, 0px)); }
+  .tabs { width: min(92%, 440px); }
+}

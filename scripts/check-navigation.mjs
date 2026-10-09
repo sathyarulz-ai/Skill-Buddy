@@ -1,0 +1,10 @@
+import { readFileSync } from 'node:fs';
+import assert from 'node:assert/strict';
+const app = readFileSync(new URL('../src/app.js', import.meta.url), 'utf8');
+const css = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
+assert.match(app, /function activeTabFor\(screen\)/, 'navigation should map each screen to an active destination');
+assert.match(app, /if\(v!==\'onb\' && S\.me\) a\.insertAdjacentHTML\(\'beforeend\',tabs\(activeTabFor\(v\)\)\)/, 'navigation should be mounted globally outside onboarding');
+assert.equal((app.match(/tabs\('/g) || []).length, 0, 'individual screens must not embed duplicate navigation bars');
+assert.match(css, /\.dock \{ bottom: calc\(94px \+ env\(safe-area-inset-bottom, 0px\)\);/, 'bottom action dock should sit above navigation');
+assert.match(css, /\.wrap \{ padding-bottom: calc\(190px \+ env\(safe-area-inset-bottom, 0px\)\);/, 'content should reserve space for fixed navigation');
+console.log('Persistent navigation checks passed.');
