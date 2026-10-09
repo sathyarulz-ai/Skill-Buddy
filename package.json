@@ -1,11 +1,11 @@
 {
   "name": "skill-buddy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "description": "A playful, local-first skill-practice companion for children and families",
   "license": "MIT",
   "scripts": {
-    "test": "node --check src/catalogue.js && node --check src/app.js && node --check sw.js && node scripts/check-pwa.mjs"
+    "test": "node --check src/catalogue.js && node --check src/app.js && node --check sw.js && node scripts/check-pwa.mjs && node scripts/check-navigation.mjs"
   },
   "engines": {
     "node": ">=18"

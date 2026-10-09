@@ -4,6 +4,13 @@
 
 > Status: community prototype. Please test carefully before using it with children or treating it as a secure account system.
 
+
+### Recent UI polish (0.1.1)
+- Fixed primary navigation so Home, Map, Start and Me persist across all post-onboarding screens.
+- Journey and activity-picker action docks sit above the navigation instead of competing for the same bottom space.
+- Active navigation state follows the current screen; onboarding remains distraction-free.
+- Added a lightweight navigation regression check to `npm test`.
+
 ## Product principles
 
 - **Human first:** clear language, calm hierarchy, forgiving interactions, and no shame-based progress.
